@@ -1,49 +1,68 @@
 package controller;
 
-import java.util.Random;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 
 public class Faturamento {
+	
+	public Faturamento() {
+		super();
+	}
 
-    public static double[] gerarValoresAleatorios(int tam, double min, double max) {
-        Random random = new Random();
-        double[] valores = new double[tam];
-        for (int i = 0; i < tam; i++) {
-            valores[i] = min + (max - min) * random.nextDouble();
-        }
-        return valores;
-    }
+	public void carregarArquivo(String nomeArquivo) {
+		try {
+			File inputFile = new File(nomeArquivo);
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = dBuilder.parse(inputFile);
+			doc.getDocumentElement().normalize();
 
-    public static void maiorMenor(double[] vet, int tam, double[] menorMaior) {
-        double menor = vet[0];
-        double maior = vet[0];
+			NodeList nList = doc.getElementsByTagName("row");
 
-        for (int i = 1; i < tam; i++) {
-            if (menor > vet[i]) {
-                menor = vet[i];
-            }
-            if (maior < vet[i]) {
-                maior = vet[i];
-            }
-        }
-        menorMaior[0] = menor;
-        menorMaior[1] = maior;
-    }
+			List<Double> faturamentoList = new ArrayList<>();
 
-    public static double mediaMensal(double[] vet, int tam) {
-        double soma = 0;
-        for (int i = 0; i < tam; i++) {
-            soma += vet[i];
-        }
-        return soma / tam;
-    }
+			for (int temp = 0; temp < nList.getLength(); temp++) {
+				double valor = Double.parseDouble(nList.item(temp).getChildNodes().item(3).getTextContent());
+				if (valor > 0) {
+					faturamentoList.add(valor);
+				}
+			}
 
-    public static int numeroDeDias(double media, double[] vet, int tam) {
-        int num = 0;
-        for (int i = 0; i < tam; i++) {
-            if (vet[i] > media) {
-                num++;
-            }
-        }
-        return num;
-    }
+			if (faturamentoList.isEmpty()) {
+				System.out.println("Nenhum valor de faturamento registrado.");
+				return;
+			}
+
+			double menorFaturamento = Collections.min(faturamentoList);
+			double maiorFaturamento = Collections.max(faturamentoList);
+
+			double soma = 0;
+			for (double faturamento : faturamentoList) {
+				soma += faturamento;
+			}
+			double mediaMensal = soma / faturamentoList.size();
+
+			int diasAcimaDaMedia = 0;
+			for (double faturamento : faturamentoList) {
+				if (faturamento > mediaMensal) {
+					diasAcimaDaMedia++;
+				}
+			}
+
+			System.out.println("Menor valor de faturamento: " + menorFaturamento);
+			System.out.println("Maior valor de faturamento: " + maiorFaturamento);
+			System.out.println("Número de dias com faturamento acima da média: " + diasAcimaDaMedia);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
