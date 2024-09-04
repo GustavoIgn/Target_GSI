@@ -9,7 +9,7 @@ Este repositório contém soluções para diversos desafios técnicos em Java. O
    - **Código**: [Código Java](https://github.com/GustavoIgn/Target_GSI/tree/master/Exercicio_2/src)
    
 3. **Análise de Faturamento Diário**
-   - **Descrição**: Com base em um vetor contendo o faturamento diário, calcule o menor e o maior valor de faturamento do mês e o número de dias em que o faturamento diário foi superior à média mensal. Ignore os dias sem faturamento.
+   - **Descrição**: Com base em um arquivo xml contendo o faturamento diário, calcule o menor e o maior valor de faturamento do mês e o número de dias em que o faturamento diário foi superior à média mensal. Ignore os dias sem faturamento.
    - **Código**: [Código Java](https://github.com/GustavoIgn/Target_GSI/tree/master/Exercicio_3/src)
 
 4. **Cálculo de Percentual de Representação por Estado**
